@@ -1,38 +1,31 @@
 class Person extends Thread {
-    private boolean isActive = true;
-    private boolean isTakingBreak = false;
+    private boolean active = true;
+    private boolean onBreak = false;
 
     Person(String name) {
         super(name);
     }
 
     public void run() {
-        while (isActive) {
-            if (!isTakingBreak) {
-                System.out.println(getName() + " says: Hi there!");
-            } else {
+        while (active) {
+            if (onBreak) {
                 System.out.println(getName() + " is resting...");
+            } else {
+                System.out.println(getName() + " says: Hi there!");
             }
-
             try {
                 Thread.sleep(500);
-            } catch (InterruptedException e) {
-                // ignore
-            }
+            } catch (InterruptedException e) {}
         }
         System.out.println(getName() + " has left.");
     }
 
-    public void takeBreak() {
-        isTakingBreak = true;
-    }
-
-    public void comeBack() {
-        isTakingBreak = false;
+    public void setOnBreak(boolean onBreak) {
+        this.onBreak = onBreak;
     }
 
     public void stopTalking() {
-        isActive = false;
+        active = false;
     }
 }
 
@@ -47,12 +40,12 @@ public class multi_threading {
         Thread.sleep(2000);
 
         System.out.println("John is taking a break...");
-        john.takeBreak();
+        john.setOnBreak(true);
 
         Thread.sleep(2000);
 
         System.out.println("John is back!");
-        john.comeBack();
+        john.setOnBreak(false);
 
         Thread.sleep(2000);
 
